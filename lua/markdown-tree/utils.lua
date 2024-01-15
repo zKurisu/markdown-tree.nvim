@@ -12,6 +12,23 @@ local function line_diff(str1, str2)
   return line_count1 - line_count2
 end
 
+local function escape_special_char(str)
+  local special_char = {
+    '%', '(', ')', '-', '.', '^',
+    '$', '[', ']', '*', '+', '?'
+  }
+
+  for _, char in pairs(special_char) do
+    if char ~= '%' then
+      str = str:gsub("%"..char, "%%"..char)
+    else
+      str = str:gsub("%"..char, "%%%"..char)
+    end
+  end
+
+  return str
+end
+
 local function read_file()
   local dir = vim.fn.system("pwd")
   local ab_file_name = ""
@@ -48,7 +65,7 @@ local function line_num_finder(titles)
     for _, line in pairs(lines) do
       line_count  = line_count + 1
       slice_begin = slice_begin + 1
-      if line:match(title.title) then
+      if line:match(escape_special_char(title.title)) then
         table.insert(titles_with_line_nr, {title = title.title, line_nr = line_count, len = title.len})
         if #lines > slice_begin then
           lines = {unpack(lines, slice_begin)}
