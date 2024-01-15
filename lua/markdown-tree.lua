@@ -7,6 +7,7 @@
 --
 local color = require("markdown-tree.colors")
 local highlight = require("markdown-tree.format")
+local utils = require("markdown-tree.utils")
 
 local api = vim.api
 local list_width = 40
