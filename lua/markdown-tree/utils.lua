@@ -14,10 +14,20 @@ end
 
 local function read_file()
   local dir = vim.fn.system("pwd")
-  local ab_file_name = dir:gsub("\n", "/") .. vim.fn.getreg('%')
+  local ab_file_name = ""
+  local file_name = vim.fn.getreg('%')
 
-  local fh = assert(io.open(ab_file_name), "Can not open ${ab_file_name}")
-  local f_content = fh:read("*a")
+  if file_name:match("^/home") then
+    ab_file_name = file_name
+  else
+    ab_file_name = dir:gsub("\n", "/") .. vim.fn.getreg('%')
+  end
+
+  local fh = assert(io.open(ab_file_name), "Can not open "..ab_file_name)
+
+  local f_content = {}
+  f_content.content = fh:read("*a")
+  f_content.file = vim.fn.getreg('%')
   fh:close()
 
   return f_content
@@ -29,7 +39,7 @@ local function line_num_finder(titles)
   local lines = {}
   local titles_with_line_nr = {}
 
-  for line in f_content:gmatch("[^\n]*\n?") do
+  for line in f_content.content:gmatch("[^\n]*\n?") do
     table.insert(lines, line)
   end
 
