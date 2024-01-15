@@ -28,8 +28,9 @@ local function highlight_title(buffer, titles)
   for i, title in pairs(titles) do
     local line_nr = i - 1
     for regex, hg in pairs(HIGHLIGHT_GROUPS) do
-      if title:match(regex) then
+      if title.title:match(regex) then
         highlight("MarkdownTitle"..hg.name, line_nr, text_start, text_start+hg.len)
+        highlight("Comment", line_nr, title.len, -1)
         break
       end
     end

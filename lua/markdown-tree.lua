@@ -17,26 +17,25 @@ vim.keymap.set("n", "mh", "<cmd>lua MarkdownTree()<CR>")
 
 local function get_titles()
   local regex = "^#" -- Begin with '#' is a title line, and not in code block
-  local dir = vim.fn.system("pwd")
-  local ab_file_name = dir:gsub("\n", "/") .. vim.fn.getreg('%')
-
-  local fh = assert(io.open(ab_file_name), "Can not open ${ab_file_name}")
-  local f_content = fh:read("*a")
-  fh:close()
+  local f_content = utils.read_file()
 
   local without_code_block = f_content:gsub("```(.-)```", "")
   local titles = {}
   for line in without_code_block:gmatch("[^\r\n]+") do
-    if line:match("^#") then
-      table.insert(titles, line)
+    if line:match(regex) then
+      table.insert(titles, {title = line, len = line:len()})
     end
   end
 
-  return titles
+  return utils.line_num_finder(titles)
 end
 
 local function list_title() -- list all title
   local titles = get_titles()
+  local disp_titles = {}
+  for _, title in pairs(titles) do
+    table.insert(disp_titles, string.format("%s -- %s", title.title, title.line_nr))
+  end
 
   local options = {
     bufhidden = 'wipe';
@@ -52,7 +51,7 @@ local function list_title() -- list all title
 
   api.nvim_command('botright '..list_width..'vnew | set nonumber norelativenumber')
   api.nvim_win_set_buf(0, buf)
-  api.nvim_buf_set_lines(buf, 0, -1, false, titles)
+  api.nvim_buf_set_lines(buf, 0, -1, false, disp_titles)
   api.nvim_buf_set_option(buf, 'modifiable', false)
 
   return {buf = buf, titles = titles}

@@ -1,7 +1,7 @@
 # A Markdown Title Explorer for Neovim Written In Lua
 Target:
 
-    ✅️ Basic title list 
+    ✅️ Basic title list with line number
     ✅️ Basic list highlight
        Basic jump
        Title editting
