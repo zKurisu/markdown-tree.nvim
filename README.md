@@ -1,13 +1,13 @@
 # A Markdown Title Explorer for Neovim Written In Lua
 Target:
 
-    ✅️Basic title list 
-    ✅️Basic list highlight
-      Basic jump
-      Title editting
-      Real time update
-      Custom color setting
-      Custom keybinding
+    ✅️ Basic title list 
+    ✅️ Basic list highlight
+       Basic jump
+       Title editting
+       Real time update
+       Custom color setting
+       Custom keybinding
 
 # Installation
 ## Plugin Managers
@@ -30,7 +30,7 @@ return {
   version = "*",
   lazy = false,
   config = function()
-    require("nvim-tree")
+    require("markdown-tree")
   end,
 }
 ```
