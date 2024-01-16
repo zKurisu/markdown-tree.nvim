@@ -36,6 +36,7 @@ local function list_title() -- list all title
   local meta = get_meta()
   local titles = meta.titles
   local file = meta.file
+  local pre_win = utils.get_win()
 
   local disp_titles = {}
   for _, title in pairs(titles) do
@@ -48,6 +49,7 @@ local function list_title() -- list all title
     modifiable = true;
   }
   local buf = api.nvim_create_buf(false, true)
+  if pre_win ~= nil then vim.api.nvim_win_close(pre_win, true) end
   api.nvim_buf_set_name(buf, BUF_NAME)
 
   for opt, val in pairs(options) do

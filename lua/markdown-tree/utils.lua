@@ -111,5 +111,6 @@ return {
   read_file = read_file,
   line_num_finder = line_num_finder,
   get_buf = get_buf,
+  get_win = get_win,
   escape_special_char = escape_special_char
 }
