@@ -5,14 +5,8 @@
 -- 2024-01-15
 --
 --
-local conf = require('plugin.lib.conf')
+local conf = require('markdown-tree.conf')
 local get_buf_name = conf.get_buf_name
-
-local function line_diff(str1, str2)
-  local line_count1 = select(2, str1:gsub("\n", ""))
-  local line_count2 = select(2, str2:gsub("\n", ""))
-  return line_count1 - line_count2
-end
 
 local function escape_special_char(str)
   local special_char = {
@@ -80,6 +74,28 @@ local function line_num_finder(titles)
   return titles_with_line_nr
 end
 
+local function get_meta()
+  local regex = "^#" -- Begin with '#' is a title line, and not in code block
+  local f_content = read_file()
+
+  local without_code_block = f_content.content:gsub("```(.-)```", "")
+  local titles = {}
+  for line in without_code_block:gmatch("[^\r\n]+") do
+    if line:match(regex) then
+      table.insert(titles, {title = line, len = line:len()})
+    end
+  end
+
+  return { titles = line_num_finder(titles), file = f_content.file }
+end
+
+local function line_diff(str1, str2)
+  local line_count1 = select(2, str1:gsub("\n", ""))
+  local line_count2 = select(2, str2:gsub("\n", ""))
+  return line_count1 - line_count2
+end
+
+
 local function get_buf()
   local BUF_NAME = get_buf_name()
   local regex = '.*'..BUF_NAME..'$'
@@ -110,6 +126,7 @@ end
 return {
   read_file = read_file,
   line_num_finder = line_num_finder,
+  get_meta = get_meta,
   get_buf = get_buf,
   get_win = get_win,
   escape_special_char = escape_special_char

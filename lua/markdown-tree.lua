@@ -13,27 +13,10 @@ local conf = require("markdown-tree.conf")
 local api = vim.api
 local list_width = 40
 local BUF_NAME = conf.get_buf_name()
-color.init_colors()
-
 vim.keymap.set("n", "mh", "<cmd>lua MarkdownTree()<CR>")
 
-local function get_meta()
-  local regex = "^#" -- Begin with '#' is a title line, and not in code block
-  local f_content = utils.read_file()
-
-  local without_code_block = f_content.content:gsub("```(.-)```", "")
-  local titles = {}
-  for line in without_code_block:gmatch("[^\r\n]+") do
-    if line:match(regex) then
-      table.insert(titles, {title = line, len = line:len()})
-    end
-  end
-
-  return { titles = utils.line_num_finder(titles), file = f_content.file }
-end
-
 local function list_title() -- list all title
-  local meta = get_meta()
+  local meta = utils.get_meta()
   local titles = meta.titles
   local file = meta.file
   local pre_win = utils.get_win()
@@ -72,10 +55,6 @@ local function edit_title() -- Edit the title
 
 end
 
-local function buf_close()
-
-end
-
 function Jump2Title(file) -- Jump to the title under cursor
   local line = vim.api.nvim_get_current_line()
   local line_nr = line:gsub("(.-)%-%- ", "")
@@ -84,8 +63,8 @@ function Jump2Title(file) -- Jump to the title under cursor
   for _, win in pairs(vim.api.nvim_list_wins()) do
     local buf_name = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
     if string.match(buf_name, regex) then
-      vim.api.nvim_win_set_cursor(win, {tonumber(line_nr), 0})
       vim.api.nvim_set_current_win(win)
+      vim.api.nvim_win_set_cursor(win, {tonumber(line_nr), 0})
       break
     end
   end
