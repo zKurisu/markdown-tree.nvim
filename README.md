@@ -3,7 +3,7 @@ Target:
 
     ✅️ Basic title list with line number
     ✅️ Basic list highlight
-       Basic jump
+    ✅️ Basic jump
        Title editting
        Real time update
        Custom color setting

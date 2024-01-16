@@ -77,19 +77,14 @@ end
 function Jump2Title(file) -- Jump to the title under cursor
   local line = vim.api.nvim_get_current_line()
   local line_nr = line:gsub("(.-)%-%- ", "")
-  local buffer_list = vim.api.nvim_list_bufs()
-  local win_list = vim.api.nvim_list_wins()
+  local regex = '.*'..utils.escape_special_char(file)..'$'
 
-  -- for _, win_id in pairs(win_list) do
-  --   print(win_id)
-  -- end
-
-  for _, buf_nr in pairs(buffer_list) do
-    local buf_name = vim.api.nvim_buf_get_name(buf_nr)
-    if buf_name:match(file) then
-      -- vim.api.nvim_win_set_buf(1002, buf_nr)
-      -- vim.api.nvim_command(":b"..buf_nr)
-      -- vim.api.nvim_command(":"..line_nr)
+  for _, win in pairs(vim.api.nvim_list_wins()) do
+    local buf_name = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
+    if string.match(buf_name, regex) then
+      vim.api.nvim_win_set_cursor(win, {tonumber(line_nr), 0})
+      vim.api.nvim_set_current_win(win)
+      break
     end
   end
 end
