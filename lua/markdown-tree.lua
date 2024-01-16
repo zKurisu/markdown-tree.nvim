@@ -8,10 +8,11 @@
 local color = require("markdown-tree.colors")
 local highlight = require("markdown-tree.format")
 local utils = require("markdown-tree.utils")
+local conf = require("markdown-tree.conf")
 
 local api = vim.api
 local list_width = 40
-local BUF_NAME = "Markdown Titles"
+local BUF_NAME = conf.get_buf_name()
 color.init_colors()
 
 vim.keymap.set("n", "mh", "<cmd>lua MarkdownTree()<CR>")
