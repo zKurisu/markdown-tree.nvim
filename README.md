@@ -9,7 +9,7 @@ Target:
        Custom color setting
        Custom keybinding
 
-![](./img/.github/markdown-tree.png)
+![](https://raw.githubusercontent.com/zkurisu/markdown-tree.nvim/master/.github/markdown-tree.png)
 # Installation
 ## Plugin Managers
 ### packer
