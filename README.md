@@ -9,6 +9,7 @@ Target:
        Custom color setting
        Custom keybinding
 
+![](./img/.github/markdown-tree.png)
 # Installation
 ## Plugin Managers
 ### packer
