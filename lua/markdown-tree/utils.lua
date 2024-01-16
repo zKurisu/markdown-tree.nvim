@@ -5,6 +5,8 @@
 -- 2024-01-15
 --
 --
+local conf = require('plugin.lib.conf')
+local get_buf_name = conf.get_buf_name
 
 local function line_diff(str1, str2)
   local line_count1 = select(2, str1:gsub("\n", ""))
@@ -78,8 +80,36 @@ local function line_num_finder(titles)
   return titles_with_line_nr
 end
 
+local function get_buf()
+  local BUF_NAME = get_buf_name()
+  local regex = '.*'..BUF_NAME..'$'
+
+  for _, win in pairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local buf_name = vim.api.nvim_buf_get_name(buf)
+
+    if string.match(buf_name, regex) ~= nil then return buf end
+  end
+
+  return nil
+end
+
+local function get_win()
+  local BUF_NAME = get_buf_name()
+  local regex = '.*'..BUF_NAME..'$'
+
+  for _, win in pairs(vim.api.nvim_list_wins()) do
+    local buf_name = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
+
+    if string.match(buf_name, regex) ~= nil then return win end
+  end
+
+  return nil
+end
 
 return {
   read_file = read_file,
-  line_num_finder = line_num_finder
+  line_num_finder = line_num_finder,
+  get_buf = get_buf,
+  escape_special_char = escape_special_char
 }
