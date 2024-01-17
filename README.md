@@ -7,7 +7,7 @@ Target:
        Title editting
        Real time update
        Custom color setting
-       Custom keybinding
+    ✅️ Custom keybinding
 
 ![](https://raw.githubusercontent.com/zkurisu/markdown-tree.nvim/master/.github/markdown-tree.png)
 # Installation
@@ -37,7 +37,20 @@ return {
 ```
 
 # Basic usage
-For now, it's bind to `mh` to show titles.
+You can run `:lua MarkdownTree()` or set a keybinding for it, `vim.keymap.set("n", "mh", "<cmd>lua MarkdownTree()<CR>")`, you can add it to `init.vim`/`init.lua`.
+
+For lazy, you could add it to config:
+```lua
+return {
+  "zkurisu/markdown-tree.nvim",
+  version = "*",
+  lazy = false,
+  config = function()
+    require("markdown-tree")
+    vim.keymap.set("n", "mh", "<cmd>lua MarkdownTree()<CR>")
+  end,
+}
+```
 
 # Screenshots
 Waiting for finish.
