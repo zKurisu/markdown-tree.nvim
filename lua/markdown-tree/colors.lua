@@ -9,14 +9,14 @@
 local cmd = vim.api.nvim_command -- Run vim command
 
 local colors = {
-  red = vim.g.terminal_color_1 or 'red',
-  green = vim.g.terminal_color_2 or 'green',
-  yellow = vim.g.terminal_color_3 or 'yellow',
-  blue = vim.g.terminal_color_4 or 'blue',
-  purple = vim.g.terminal_color_5 or 'purple',
-  cyan = vim.g.terminal_color_6 or 'cyan',
-  orange = vim.g.terminal_color_11 or 'orange',
-  dark_red = vim.g.terminal_color_9 or 'dark red',
+  red = vim.g.terminal_color_1 or '#f7768e',
+  green = vim.g.terminal_color_2 or '#9ece6a',
+  yellow = vim.g.terminal_color_3 or '#e0af68',
+  blue = vim.g.terminal_color_4 or '#7aa2f7',
+  purple = vim.g.terminal_color_5 or 'bb9af7',
+  cyan = vim.g.terminal_color_6 or '7dcfff',
+  orange = vim.g.terminal_color_11 or '#e0af68',
+  dark_red = vim.g.terminal_color_9 or '#f7768e',
   lua = '#2947b1'
 }
 
