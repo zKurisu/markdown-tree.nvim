@@ -52,5 +52,8 @@ return {
 }
 ```
 
+## Jump to line
+Press `<CR>` (Enter) to jump.
+
 # Screenshots
 Waiting for finish.
