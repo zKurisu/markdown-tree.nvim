@@ -22,7 +22,7 @@ local colors = {
 
 local HIGHLIGHTS = {
   FirstLevel = { gui = 'bold', fg = colors.red },
-  SecondLevel = { fg = colors.orange },
+  SecondLevel = { gui = 'bold', fg = colors.orange },
   ThirdLevel = { gui = 'bold', fg = colors.green },
   FourthLevel = { fg = colors.purple },
   FifthLevel = { fg = colors.yellow },
