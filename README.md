@@ -4,7 +4,7 @@ Target:
     ✅️ Basic title list with line number
     ✅️ Basic list highlight
     ✅️ Basic jump
-       Title editting
+    ✅️ Title editting
        Real time update
     ✅️ Custom color setting
     ✅️ Custom keybinding
@@ -55,6 +55,9 @@ return {
 
 ## Jump to line
 Press `<CR>` (Enter) to jump.
+
+## Title editing
+Press `e` (edit) to edit the title.
 
 ## Custom highlighting
 Nine highlight group is created in advanced:

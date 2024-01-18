@@ -51,8 +51,32 @@ local function fold_title() -- Fold the title under cursor
 
 end
 
-local function edit_title() -- Edit the title
+local function update_view()
+  local buf = utils.get_buf()
+  vim.api.nvim_buf_delete(buf, {})
+  local tree = list_title()
+  highlight.highlight(tree.buf, tree.titles)
+end
 
+function EditTitle(file) -- Edit the title
+  -- Get the current line, split it to sentence and line number, sentence used as default value 
+  -- of vim.ui.input(), line used to edit, both file and buf
+  local line = vim.api.nvim_get_current_line()
+  local title_content = string.gsub(line, " %-%- %d*$", "")
+  local file_line_nr = string.gsub(line, "^(.-) %-%- ", "")
+  local file_buf = utils.get_file_buf(file)
+
+  vim.ui.input({
+    prompt = "Edit the title",
+    default = title_content
+  }, function(input)
+    vim.api.nvim_buf_set_lines(file_buf, tonumber(file_line_nr)-1, tonumber(file_line_nr), false, { input })
+    vim.api.nvim_buf_call(file_buf, function()
+      vim.cmd("w")
+    end)
+
+    update_view()
+  end)
 end
 
 function Jump2Title(file) -- Jump to the title under cursor
@@ -74,4 +98,5 @@ function MarkdownTree()
   local tree = list_title()
   highlight.highlight(tree.buf, tree.titles)
   vim.api.nvim_buf_set_keymap(tree.buf, "n", "<CR>", "<cmd>lua Jump2Title('"..tree.file.."')<CR>", {})
+  vim.api.nvim_buf_set_keymap(tree.buf, "n", "e", "<cmd>lua EditTitle('"..tree.file.."')<CR>", {})
 end

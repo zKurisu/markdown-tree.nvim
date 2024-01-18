@@ -6,6 +6,7 @@
 --
 --
 local conf = require('markdown-tree.conf')
+local highlight = require('markdown-tree.format')
 local get_buf_name = conf.get_buf_name
 
 local function escape_special_char(str)
@@ -123,11 +124,22 @@ local function get_win()
   return nil
 end
 
+local function get_file_buf(file)
+  local regex = '.*'..escape_special_char(file)..'$'
+  for _, buf in pairs(vim.api.nvim_list_bufs()) do
+    local buf_name = vim.api.nvim_buf_get_name(buf)
+    if string.match(buf_name, regex) then
+      return buf
+    end
+  end
+end
+
 return {
   read_file = read_file,
   line_num_finder = line_num_finder,
   get_meta = get_meta,
   get_buf = get_buf,
   get_win = get_win,
+  get_file_buf = get_file_buf,
   escape_special_char = escape_special_char
 }
