@@ -51,13 +51,6 @@ local function fold_title() -- Fold the title under cursor
 
 end
 
-local function update_view()
-  local buf = utils.get_buf()
-  vim.api.nvim_buf_delete(buf, {})
-  local tree = list_title()
-  highlight.highlight(tree.buf, tree.titles)
-end
-
 function EditTitle(file) -- Edit the title
   -- Get the current line, split it to sentence and line number, sentence used as default value 
   -- of vim.ui.input(), line used to edit, both file and buf
@@ -66,16 +59,25 @@ function EditTitle(file) -- Edit the title
   local file_line_nr = string.gsub(line, "^(.-) %-%- ", "")
   local file_buf = utils.get_file_buf(file)
 
+  local tree_buf = utils.get_buf()
+  local tree_line_nr = vim.api.nvim_win_get_cursor(0)[1]
+
   vim.ui.input({
     prompt = "Edit the title",
     default = title_content
   }, function(input)
+    local new_title = input.." -- "..file_line_nr
+    local title = { title = new_title, len = input:len() }
+
     vim.api.nvim_buf_set_lines(file_buf, tonumber(file_line_nr)-1, tonumber(file_line_nr), false, { input })
     vim.api.nvim_buf_call(file_buf, function()
       vim.cmd("w")
     end)
 
-    update_view()
+    vim.api.nvim_buf_set_option(tree_buf, 'modifiable', true)
+    vim.api.nvim_buf_set_lines(tree_buf, tree_line_nr-1, tree_line_nr, false, { title.title })
+    highlight.highlight_one_title(tree_buf, tree_line_nr-1, title)
+    vim.api.nvim_buf_set_option(tree_buf, 'modifiable', false)
   end)
 end
 

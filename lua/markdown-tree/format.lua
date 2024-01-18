@@ -20,23 +20,28 @@ local HIGHLIGHT_GROUPS = {
   ['^#########%s+'] = { name = 'NinthLevel'  , len = 9 },
 }
 
-local function highlight_title(buffer, titles)
+local function highlight_one_title(buffer, line_nr, title)
   local function highlight(group, line, from, to)
     api.nvim_buf_add_highlight(buffer, -1, group, line, from, to)
   end
   local text_start = 0
-  for i, title in pairs(titles) do
-    local line_nr = i - 1
-    for regex, hg in pairs(HIGHLIGHT_GROUPS) do
-      if title.title:match(regex) then
-        highlight("MarkdownTitle"..hg.name, line_nr, text_start, text_start+hg.len)
-        highlight("Comment", line_nr, title.len, -1)
-        break
-      end
+  for regex, hg in pairs(HIGHLIGHT_GROUPS) do
+    if title.title:match(regex) then
+      highlight("MarkdownTitle"..hg.name, line_nr, text_start, text_start+hg.len)
+      highlight("Comment", line_nr, title.len, -1)
+      break
     end
   end
 end
 
+local function highlight_title(buffer, titles)
+  for i, title in pairs(titles) do
+    local line_nr = i - 1
+    highlight_one_title(buffer, line_nr, title)
+  end
+end
+
 return {
+  highlight_one_title = highlight_one_title,
   highlight = highlight_title
 }
