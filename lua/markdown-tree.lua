@@ -13,6 +13,7 @@ local conf = require("markdown-tree.conf")
 local api = vim.api
 local list_width = 40
 local BUF_NAME = conf.get_buf_name()
+local seperator = conf.get_separator()
 color.init_colors()
 
 local function list_title() -- list all title
@@ -23,7 +24,7 @@ local function list_title() -- list all title
 
   local disp_titles = {}
   for _, title in pairs(titles) do
-    table.insert(disp_titles, string.format("%s -- %s", title.title, title.line_nr))
+    table.insert(disp_titles, string.format("%s"..seperator.str.."%s", title.title, title.line_nr))
   end
 
   local options = {
@@ -55,8 +56,8 @@ function EditTitle(file) -- Edit the title
   -- Get the current line, split it to sentence and line number, sentence used as default value 
   -- of vim.ui.input(), line used to edit, both file and buf
   local line = vim.api.nvim_get_current_line()
-  local title_content = string.gsub(line, " %-%- %d*$", "")
-  local file_line_nr = string.gsub(line, "^(.-) %-%- ", "")
+  local title_content = string.gsub(line, utils.escape_special_char(seperator.str).."%d*$", "")
+  local file_line_nr = string.gsub(line, "^(.-)"..utils.escape_special_char(seperator.str), "")
   local file_buf = utils.get_file_buf(file)
 
   local tree_buf = utils.get_buf()
@@ -66,7 +67,7 @@ function EditTitle(file) -- Edit the title
     prompt = "Edit the title",
     default = title_content
   }, function(input)
-    local new_title = input.." -- "..file_line_nr
+    local new_title = input..seperator.len..file_line_nr
     local title = { title = new_title, len = input:len() }
 
     vim.api.nvim_buf_set_lines(file_buf, tonumber(file_line_nr)-1, tonumber(file_line_nr), false, { input })
@@ -83,7 +84,7 @@ end
 
 function Jump2Title(file) -- Jump to the title under cursor
   local line = vim.api.nvim_get_current_line()
-  local line_nr = line:gsub("(.-)%-%- ", "")
+  local line_nr = line:gsub("(.-)"..utils.escape_special_char(seperator.str), "")
   local regex = '.*'..utils.escape_special_char(file)..'$'
 
   for _, win in pairs(vim.api.nvim_list_wins()) do
