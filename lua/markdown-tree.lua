@@ -67,7 +67,7 @@ function EditTitle(file) -- Edit the title
     prompt = "Edit the title",
     default = title_content
   }, function(input)
-    local new_title = input..seperator.len..file_line_nr
+    local new_title = input..seperator.str..file_line_nr
     local title = { title = new_title, len = input:len() }
 
     vim.api.nvim_buf_set_lines(file_buf, tonumber(file_line_nr)-1, tonumber(file_line_nr), false, { input })
