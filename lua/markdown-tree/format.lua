@@ -43,5 +43,6 @@ end
 
 return {
   highlight_one_title = highlight_one_title,
-  highlight = highlight_title
+  highlight = highlight_title,
+  HIGHLIGHT_GROUPS = HIGHLIGHT_GROUPS
 }

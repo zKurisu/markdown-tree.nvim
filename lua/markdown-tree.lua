@@ -13,7 +13,6 @@ local conf = require("markdown-tree.conf")
 local api = vim.api
 local list_width = 40
 local BUF_NAME = conf.get_buf_name()
-local seperator = conf.get_separator()
 color.init_colors()
 
 local function list_title() -- list all title
@@ -24,7 +23,7 @@ local function list_title() -- list all title
 
   local disp_titles = {}
   for _, title in pairs(titles) do
-    table.insert(disp_titles, string.format("%s"..seperator.str.."%s", title.title, title.line_nr))
+    table.insert(disp_titles, string.format("%s -- %s", title.title, title.line_nr))
   end
 
   local options = {
@@ -56,8 +55,8 @@ function EditTitle(file) -- Edit the title
   -- Get the current line, split it to sentence and line number, sentence used as default value 
   -- of vim.ui.input(), line used to edit, both file and buf
   local line = vim.api.nvim_get_current_line()
-  local title_content = string.gsub(line, utils.escape_special_char(seperator.str).."%d*$", "")
-  local file_line_nr = string.gsub(line, "^(.-)"..utils.escape_special_char(seperator.str), "")
+  local title_content = string.gsub(line, " %-%- %d*$", "")
+  local file_line_nr = string.gsub(line, "^(.-) %-%- ", "")
   local file_buf = utils.get_file_buf(file)
 
   local tree_buf = utils.get_buf()
@@ -67,7 +66,7 @@ function EditTitle(file) -- Edit the title
     prompt = "Edit the title",
     default = title_content
   }, function(input)
-    local new_title = input..seperator.str..file_line_nr
+    local new_title = input.." -- "..file_line_nr
     local title = { title = new_title, len = input:len() }
 
     vim.api.nvim_buf_set_lines(file_buf, tonumber(file_line_nr)-1, tonumber(file_line_nr), false, { input })
@@ -84,7 +83,7 @@ end
 
 function Jump2Title(file) -- Jump to the title under cursor
   local line = vim.api.nvim_get_current_line()
-  local line_nr = line:gsub("(.-)"..utils.escape_special_char(seperator.str), "")
+  local line_nr = line:gsub("(.-)%-%- ", "")
   local regex = '.*'..utils.escape_special_char(file)..'$'
 
   for _, win in pairs(vim.api.nvim_list_wins()) do
@@ -97,9 +96,42 @@ function Jump2Title(file) -- Jump to the title under cursor
   end
 end
 
-function MarkdownTree()
-  local tree = list_title()
-  highlight.highlight(tree.buf, tree.titles)
-  vim.api.nvim_buf_set_keymap(tree.buf, "n", "<CR>", "<cmd>lua Jump2Title('"..tree.file.."')<CR>", {})
-  vim.api.nvim_buf_set_keymap(tree.buf, "n", "e", "<cmd>lua EditTitle('"..tree.file.."')<CR>", {})
+function UpdateLevel(level, titles)
+  local buf = utils.get_buf()
+  local selected_titles = {}
+  local highlight_titles = {}
+  local regex = ""
+  for re, hg in pairs(highlight.HIGHLIGHT_GROUPS) do
+    if hg.len == level then
+      regex = re
+    end
+  end
+
+  for _, title in pairs(titles) do
+    if title.title:match(regex) then
+      table.insert(selected_titles, string.format("%s -- %s", title.title, title.line_nr))
+      table.insert(highlight_titles, title)
+    end
+  end
+  api.nvim_buf_set_option(buf, 'modifiable', true)
+  api.nvim_buf_set_lines(buf, 0, -1, false, selected_titles)
+  highlight.highlight(buf, highlight_titles)
 end
+
+function MarkdownTree()
+  Markdowntree = list_title()
+  highlight.highlight(Markdowntree.buf, Markdowntree.titles)
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "<CR>", "<cmd>lua Jump2Title('"..Markdowntree.file.."')<CR>", {})
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "e", "<cmd>lua EditTitle('"..Markdowntree.file.."')<CR>", {})
+
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "1", "<cmd>lua UpdateLevel(1, Markdowntree.titles)<CR>", {})
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "2", "<cmd>lua UpdateLevel(2, Markdowntree.titles)<CR>", {})
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "3", "<cmd>lua UpdateLevel(3, Markdowntree.titles)<CR>", {})
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "4", "<cmd>lua UpdateLevel(4, Markdowntree.titles)<CR>", {})
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "5", "<cmd>lua UpdateLevel(5, Markdowntree.titles)<CR>", {})
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "6", "<cmd>lua UpdateLevel(6, Markdowntree.titles)<CR>", {})
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "7", "<cmd>lua UpdateLevel(7, Markdowntree.titles)<CR>", {})
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "8", "<cmd>lua UpdateLevel(8, Markdowntree.titles)<CR>", {})
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "9", "<cmd>lua UpdateLevel(9, Markdowntree.titles)<CR>", {})
+end
+

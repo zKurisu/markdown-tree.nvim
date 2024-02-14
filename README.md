@@ -8,9 +8,9 @@ Target:
        Real time update
     ✅️ Custom color setting
     ✅️ Custom keybinding
+    ✅️ Display specific level
 
-![](./.github/markdown-tree.png)
-
+![](https://raw.githubusercontent.com/zkurisu/markdown-tree.nvim/master/.github/markdown-tree.png)
 # Installation
 ## Plugin Managers
 ### packer
@@ -59,6 +59,9 @@ Press `<CR>` (Enter) to jump.
 
 ## Title editing
 Press `e` (edit) to edit the title.
+
+## Level display
+Press `1` to display level 1 titles, press `2` to display level 2 titles and so on.
 
 ## Custom highlighting
 Nine highlight group is created in advanced:
