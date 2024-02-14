@@ -100,10 +100,12 @@ function UpdateLevel(level, titles)
   local buf = utils.get_buf()
   local selected_titles = {}
   local highlight_titles = {}
-  local regex = ""
-  for re, hg in pairs(highlight.HIGHLIGHT_GROUPS) do
-    if hg.len == level then
-      regex = re
+  local regex = "^#"
+  if level ~= 0 then
+    for re, hg in pairs(highlight.HIGHLIGHT_GROUPS) do
+      if hg.len == level then
+        regex = re
+      end
     end
   end
 
