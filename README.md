@@ -10,7 +10,7 @@ Target:
     ✅️ Custom keybinding
     ✅️ Display specific level
 
-![](https://raw.githubusercontent.com/zkurisu/markdown-tree.nvim/master/.github/markdown-tree.png)
+![](./.github/markdown-tree.gif)
 # Installation
 ## Plugin Managers
 ### packer
