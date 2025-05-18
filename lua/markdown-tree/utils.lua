@@ -81,6 +81,8 @@ local function get_meta()
       regex = "^#"
   elseif vim.bo.filetype == 'typst' then
       regex = "^="
+  elseif vim.bo.filetype == 'tex' then
+      regex = '^\\%w-section'
   end
 
   local f_content = read_file()

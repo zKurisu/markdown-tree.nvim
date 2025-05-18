@@ -34,6 +34,12 @@ elseif vim.bo.filetype == 'typst' then
         ['^========%s+']  = { name = 'EighthLevel' , len = 8 },
         ['^=========%s+'] = { name = 'NinthLevel'  , len = 9 },
     }
+elseif vim.bo.filetype == 'tex' then
+    HIGHLIGHT_GROUPS = {
+        ['^\\section']            = { name = 'FirstLevel'  , len = 8 },
+        ['^\\subsection']         = { name = 'SecondLevel' , len = 11 },
+        ['^\\subsubsection']      = { name = 'ThirdLevel'  , len = 14 },
+    }
 end
 
 

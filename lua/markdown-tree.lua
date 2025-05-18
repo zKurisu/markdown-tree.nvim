@@ -105,6 +105,8 @@ function UpdateLevel(level, titles)
     regex = "^#"
   elseif vim.bo.filetype == 'typst' then
     regex = "^="
+  elseif vim.bo.filetype == 'tex' then
+    regex = '^\\%w-section'
   end
 
   if level ~= 0 then

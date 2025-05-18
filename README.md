@@ -10,6 +10,7 @@ Target:
     ✅️ Custom keybinding
     ✅️ Display specific level
     ✅️ Add Support for Typst title
+    ✅️ Add Support for LaTeX title
 
 ![](./.github/markdown-tree.gif)
 # Installation
