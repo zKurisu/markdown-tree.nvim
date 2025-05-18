@@ -9,6 +9,7 @@ Target:
     ✅️ Custom color setting
     ✅️ Custom keybinding
     ✅️ Display specific level
+    ✅️ Add Support for Typst title
 
 ![](./.github/markdown-tree.gif)
 # Installation

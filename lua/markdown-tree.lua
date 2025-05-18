@@ -39,7 +39,7 @@ local function list_title() -- list all title
     api.nvim_buf_set_option(buf, opt, val)
   end
 
-  api.nvim_command('botright '..list_width..'vnew | set nonumber norelativenumber')
+  api.nvim_command('botright '..list_width..'vnew | set nonumber norelativenumber | set nowrap')
   api.nvim_win_set_buf(0, buf)
   api.nvim_buf_set_lines(buf, 0, -1, false, disp_titles)
   api.nvim_buf_set_option(buf, 'modifiable', false)
@@ -101,6 +101,12 @@ function UpdateLevel(level, titles)
   local selected_titles = {}
   local highlight_titles = {}
   local regex = "^#"
+  if vim.bo.filetype == 'markdown' then
+    regex = "^#"
+  elseif vim.bo.filetype == 'typst' then
+    regex = "^="
+  end
+
   if level ~= 0 then
     for re, hg in pairs(highlight.HIGHLIGHT_GROUPS) do
       if hg.len == level then
@@ -126,6 +132,7 @@ function MarkdownTree()
   vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "<CR>", "<cmd>lua Jump2Title('"..Markdowntree.file.."')<CR>", {})
   vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "e", "<cmd>lua EditTitle('"..Markdowntree.file.."')<CR>", {})
 
+  vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "0", "<cmd>lua UpdateLevel(0, Markdowntree.titles)<CR>", {})
   vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "1", "<cmd>lua UpdateLevel(1, Markdowntree.titles)<CR>", {})
   vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "2", "<cmd>lua UpdateLevel(2, Markdowntree.titles)<CR>", {})
   vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "3", "<cmd>lua UpdateLevel(3, Markdowntree.titles)<CR>", {})
@@ -136,4 +143,3 @@ function MarkdownTree()
   vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "8", "<cmd>lua UpdateLevel(8, Markdowntree.titles)<CR>", {})
   vim.api.nvim_buf_set_keymap(Markdowntree.buf, "n", "9", "<cmd>lua UpdateLevel(9, Markdowntree.titles)<CR>", {})
 end
-

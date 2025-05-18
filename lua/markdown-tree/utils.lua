@@ -77,6 +77,12 @@ end
 
 local function get_meta()
   local regex = "^#" -- Begin with '#' is a title line, and not in code block
+  if vim.bo.filetype == 'markdown' then
+      regex = "^#"
+  elseif vim.bo.filetype == 'typst' then
+      regex = "^="
+  end
+
   local f_content = read_file()
 
   local without_code_block = f_content.content:gsub("```(.-)```", "")
